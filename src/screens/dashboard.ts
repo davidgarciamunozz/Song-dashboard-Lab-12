@@ -7,6 +7,7 @@ const song = {
     title: '',
     author: '',
     album: '',
+    dateAdded: new Date(),
     duration: 0,
     img : ''
 }
@@ -95,13 +96,24 @@ class Dashboard extends HTMLElement {
                 const duration = this.ownerDocument.createElement('p');
                 duration.textContent = `Duración: ${song.duration}`;
 
+                // Convertir la fecha de Firestore en un objeto Date
+                const dateAdded = new Date(song.dateAdded.seconds * 1000);
+                const formattedDate = dateAdded.toLocaleDateString(); // Puedes personalizar el formato
+
+                const date = this.ownerDocument.createElement('p');
+                date.textContent = `Añadida en: ${formattedDate}`; // Mostrar la fecha formateada
+
+
                 const img = this.ownerDocument.createElement('p');
                 img.textContent = `Imagen: ${song.img}`;
+
+            
 
                 productElement.appendChild(title);
                 productElement.appendChild(author);
                 productElement.appendChild(album);
                 productElement.appendChild(duration);
+                productElement.appendChild(date);
                 productElement.appendChild(img);
 
                 productListContainer.appendChild(productElement);
