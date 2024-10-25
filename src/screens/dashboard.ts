@@ -87,8 +87,14 @@ class Dashboard extends HTMLElement {
                 const title = this.ownerDocument.createElement('h2');
                 title.textContent = song.title;
 
-                const author = this.ownerDocument.createElement('p');
+                const author = this.ownerDocument.createElement('span');
                 author.textContent = `Autor: ${song.author}`;
+                author.style.color = '#a0a0a0';
+
+                const titleAndAuthor = this.ownerDocument.createElement('div');
+                titleAndAuthor.appendChild(title);
+                titleAndAuthor.appendChild(author);
+                titleAndAuthor.id = 'title-author';
 
                 const album = this.ownerDocument.createElement('p');
                 album.textContent = `Álbum: ${song.album}`;
@@ -106,14 +112,17 @@ class Dashboard extends HTMLElement {
 
                 const imgElement = this.ownerDocument.createElement('img');
                 imgElement.src = song.img;
+
+                const imgAndInfo = this.ownerDocument.createElement('div');
+                imgAndInfo.appendChild(imgElement);
+                imgAndInfo.appendChild(titleAndAuthor);
+                imgAndInfo.id = 'img-info';
             
 
-                productElement.appendChild(title);
-                productElement.appendChild(author);
+                productElement.appendChild(imgAndInfo);
                 productElement.appendChild(album);
-                productElement.appendChild(duration);
                 productElement.appendChild(date);
-                productElement.appendChild(imgElement);
+                productElement.appendChild(duration);
 
                 productListContainer.appendChild(productElement);
             });
@@ -133,6 +142,14 @@ class Dashboard extends HTMLElement {
                     font-family: Arial, sans-serif:
                     color: #ffffff;
                     padding: 20px;
+                }
+                #img-info{
+                    display: flex;
+                    gap: 10px;
+                    align-items: center;
+                }
+                #title-author{
+                    min-width: 200px;
                 }
                 h1 {
                     font-size: 2.5em;
@@ -164,8 +181,8 @@ class Dashboard extends HTMLElement {
                     gap: 20px;
                 }
                 #product-list > div {
-                    display: grid;
-                    grid-template-columns: auto 1fr auto;
+                    display: flex;
+                    justify-content: space-between;
                     gap: 10px;
                     align-items: center;
                     padding: 10px;
@@ -184,6 +201,7 @@ class Dashboard extends HTMLElement {
                 }
                 #product-list p {
                     margin: 0;
+                    min-width: 200px;
                     color: #a0a0a0;
                 }
             `;
@@ -214,7 +232,7 @@ class Dashboard extends HTMLElement {
             durationInput.addEventListener('change', this.changeDuration);
     
             const imgInput = this.ownerDocument.createElement('input');
-            imgInput.placeholder = 'Img';
+            imgInput.placeholder = 'Image link address';
             imgInput.addEventListener('change', this.changeImg);
     
             const saveButton = this.ownerDocument.createElement('button');
