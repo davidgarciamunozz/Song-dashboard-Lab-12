@@ -16,6 +16,7 @@ class Dashboard extends HTMLElement {
     constructor () {
         super();
         this.attachShadow({ mode: 'open' });
+        addObserver(this);
 
         //Enlazar
         this.changeTitle = this.changeTitle.bind(this);
@@ -25,20 +26,24 @@ class Dashboard extends HTMLElement {
         this.changeImg = this.changeImg.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.render = this.render.bind(this);
-
-        addObserver(this);
     }
 
     async connectedCallback () {
-        if (appState.songs.length === 0) {
-            const action =  await getSongsAction();
-            dispatch(action);
-
-            this.updateSongList();
-        } else {
-            this.render();
+        try {
+            if (appState.songs.length === 0) {
+                // Llamamos a getSongsAction y verificamos si hay canciones
+                const action = await getSongsAction();
+                
+                // Solo ejecutamos dispatch si hay canciones
+                if (action.payload && action.payload.length > 0) {
+                    dispatch(action);
+                    this.updateSongList();
+                }
+            }
+            this.render();  // Renderizamos independientemente de si hay canciones o no
+        } catch (error) {
+            console.error("Error fetching songs:", error);
         }
-    
     }
     changeTitle (e:any) {
         song.title = e.target.value;
@@ -60,6 +65,7 @@ class Dashboard extends HTMLElement {
         e.preventDefault();
         console.log(song);
         await addSong(song);
+        //push el nuevo producto al estado global
 
         // Limpiar inputs
         this.shadowRoot?.querySelectorAll('input').forEach(input => input.value = '');
@@ -72,29 +78,25 @@ class Dashboard extends HTMLElement {
         if (productListContainer) {
             // Limpia el contenedor de la lista de productos antes de agregar nuevos
             productListContainer.innerHTML = '';
-
             console.log(appState.songs);
 
             appState.songs?.forEach((song: any) => {
                 const productElement = this.ownerDocument.createElement('div');
 
-                const songData = song.data ? song.data() : song; 
-                console.log(songData);
-
                 const title = this.ownerDocument.createElement('h2');
-                title.textContent = songData._document.data.value.mapValue.fields.title.stringValue;
+                title.textContent = song.title;
 
                 const author = this.ownerDocument.createElement('p');
-                author.textContent = `Autor: ${songData._document.data.value.mapValue.fields.author.stringValue}`;
+                author.textContent = `Autor: ${song.author}`;
 
                 const album = this.ownerDocument.createElement('p');
-                album.textContent = `Álbum: ${songData._document.data.value.mapValue.fields.album.stringValue}`;
+                album.textContent = `Álbum: ${song.album}`;
 
                 const duration = this.ownerDocument.createElement('p');
-                duration.textContent = `Duración: ${songData._document.data.value.mapValue.fields.duration.stringValue}`;
+                duration.textContent = `Duración: ${song.duration}`;
 
                 const img = this.ownerDocument.createElement('p');
-                img.textContent = `Imagen: ${songData._document.data.value.mapValue.fields.img.stringValue}`;
+                img.textContent = `Imagen: ${song.img}`;
 
                 productElement.appendChild(title);
                 productElement.appendChild(author);

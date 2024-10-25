@@ -10,7 +10,7 @@ class AppContainer extends HTMLElement {
     }
 
     connectedCallback () {
-        console.log(appState);
+        // console.log(appState);
         this.render();
     }
 

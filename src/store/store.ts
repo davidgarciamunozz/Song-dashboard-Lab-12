@@ -23,6 +23,7 @@ export const dispatch = (action: any) => {
 
 	persistStore(newState);
 	observers.forEach((o: any) => o.render());
+    console.log(observers);
 };
 
 //Agregar los observadores para los interesados, los suscritos

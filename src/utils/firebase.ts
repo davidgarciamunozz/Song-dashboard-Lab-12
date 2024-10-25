@@ -2,6 +2,8 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { collection, addDoc, getDocs } from "firebase/firestore"; 
+import { getSongsAction } from "../store/actions";
+import { dispatch } from "../store/store";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -26,6 +28,9 @@ export const addSong = async (song: any) => {
         const where = collection(db, "songs");
         const docRef = await addDoc(where, song);
         console.log("Song written with ID: ", docRef.id);
+        // actualizar appState con la nueva canción
+        const action =  await getSongsAction();
+        dispatch(action);
       } catch (e) {
         console.error("Error adding song: ", e);
       }
@@ -37,8 +42,9 @@ export const getSongs = async () => {
     const data: any= [];
 
     querySnapshot.forEach((doc) => {
-        data.push(doc);
+        data.push(doc.data());
     }  );
+    console.log('data', data);
 
     return data;
 }
