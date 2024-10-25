@@ -104,9 +104,8 @@ class Dashboard extends HTMLElement {
                 date.textContent = `Añadida en: ${formattedDate}`; // Mostrar la fecha formateada
 
 
-                const img = this.ownerDocument.createElement('p');
-                img.textContent = `Imagen: ${song.img}`;
-
+                const imgElement = this.ownerDocument.createElement('img');
+                imgElement.src = song.img;
             
 
                 productElement.appendChild(title);
@@ -114,7 +113,7 @@ class Dashboard extends HTMLElement {
                 productElement.appendChild(album);
                 productElement.appendChild(duration);
                 productElement.appendChild(date);
-                productElement.appendChild(img);
+                productElement.appendChild(imgElement);
 
                 productListContainer.appendChild(productElement);
             });
