@@ -124,61 +124,118 @@ class Dashboard extends HTMLElement {
         if (this.shadowRoot) {
             // Limpia el contenido antes de renderizar
             this.shadowRoot.innerHTML = '';
-
+    
+            // Add styles
+            const style = this.ownerDocument.createElement('style');
+            style.textContent = `
+                :host {
+                    display: block;
+                    font-family: Arial, sans-serif:
+                    color: #ffffff;
+                    padding: 20px;
+                }
+                h1 {
+                    font-size: 2.5em;
+                    margin-bottom: 20px;
+                }
+                form {
+                    display: flex;
+                    gap: 10px;
+                    margin-bottom: 30px;
+                }
+                input {
+                    flex: 1;
+                    padding: 10px;
+                    background-color: #2a2a3c;
+                    border: none;
+                    border-radius: 5px;
+                    color: #ffffff;
+                }
+                button {
+                    padding: 10px 20px;
+                    background-color: #6c5ce7;
+                    border: none;
+                    border-radius: 5px;
+                    color: #ffffff;
+                    cursor: pointer;
+                }
+                #product-list {
+                    display: grid;
+                    gap: 20px;
+                }
+                #product-list > div {
+                    display: grid;
+                    grid-template-columns: auto 1fr auto;
+                    gap: 10px;
+                    align-items: center;
+                    padding: 10px;
+                    background-color: #2a2a3c;
+                    border-radius: 5px;
+                }
+                #product-list img {
+                    width: 60px;
+                    height: 60px;
+                    object-fit: cover;
+                    border-radius: 5px;
+                }
+                #product-list h2 {
+                    font-size: 1.2em;
+                    margin: 0;
+                }
+                #product-list p {
+                    margin: 0;
+                    color: #a0a0a0;
+                }
+            `;
+            this.shadowRoot.appendChild(style);
+    
             // Formulario para crear productos
             const title = this.ownerDocument.createElement('h1');
-            title.textContent = 'Canciones';
+            title.textContent = 'MY PLAYLIST';
             this.shadowRoot.appendChild(title);
-
+    
             const form = this.ownerDocument.createElement('form');
             this.shadowRoot.appendChild(form);
-
+    
             const nameInput = this.ownerDocument.createElement('input');
-            nameInput.placeholder = 'Nombre de la canción';
+            nameInput.placeholder = 'Título';
             nameInput.addEventListener('change', this.changeTitle);
-
-            const priceInput = this.ownerDocument.createElement('input');
-            priceInput.placeholder = 'Autor de la canción';
-            priceInput.addEventListener('change', this.changeAuthor);
-
+    
+            const authorInput = this.ownerDocument.createElement('input');
+            authorInput.placeholder = 'Autor';
+            authorInput.addEventListener('change', this.changeAuthor);
+    
             const albumInput = this.ownerDocument.createElement('input');
-            albumInput.placeholder = 'Album de la canción';
+            albumInput.placeholder = 'Album';
             albumInput.addEventListener('change', this.changeAlbum);
-
+    
             const durationInput = this.ownerDocument.createElement('input');
-            durationInput.placeholder = 'Duración de la canción';
+            durationInput.placeholder = 'Duración';
             durationInput.addEventListener('change', this.changeDuration);
-
+    
             const imgInput = this.ownerDocument.createElement('input');
-            imgInput.placeholder = 'Imagen de la canción';
+            imgInput.placeholder = 'Img';
             imgInput.addEventListener('change', this.changeImg);
-
-
+    
             const saveButton = this.ownerDocument.createElement('button');
             saveButton.textContent = 'Guardar';
             saveButton.addEventListener('click', this.submitForm);
-
+    
             form.appendChild(nameInput);
-            form.appendChild(priceInput);
+            form.appendChild(authorInput);
             form.appendChild(albumInput);
             form.appendChild(durationInput);
             form.appendChild(imgInput);
             form.appendChild(saveButton);
-            
-
-            form.style.display = 'flex';
-            //add gap 
-            form.style.gap = '1rem';
-
+    
             // Contenedor para la lista de productos
             const productListContainer = this.ownerDocument.createElement('div');
             productListContainer.id = 'product-list';
             this.shadowRoot.appendChild(productListContainer);
-
+    
             // Renderiza la lista de productos inicial
             await this.updateSongList();
-    
-    }
+        }
 }
 }
 
